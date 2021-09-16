@@ -1,6 +1,7 @@
+
 import math as m
 import sympy as s
-import numpy as n
+from numpy import *
 
 #constants
 g = 9.80665
@@ -31,3 +32,5 @@ def mToFt(m):
 def ftToM(m):
    return(m / 3.280839895)
 
+
+#----------------------
