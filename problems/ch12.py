@@ -152,3 +152,20 @@ T1 = m/cos(radians(20))
 eq = g*r/m*T1*sin(radians(20)) - v**2
 vmin = s.solve(eq, v)
 print('min v', vmin[1])
+#------------------------
+m = 60
+r = 1200
+v0 = kmPerHrToMPerS(550)
+vf = 0
+wf = 0
+w0 = v0/r
+
+a = s.symbols('a')
+alpha= a/r
+theta = pi
+
+
+eq = -wf**2 + w0**2 + 2*alpha*theta
+a = s.solve(eq, a)
+print('acceleration', a)
+

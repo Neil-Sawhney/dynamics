@@ -69,30 +69,19 @@ U_s = 0.25
 U_k = 0.2
 theta = 75 
 
-F_fx, F_fy = sy.symbols('F_fx'), sy.symbols('F_fy')
-#F_N = m*w**2*r - m*g*sin(radians(theta))
-
+vecF_c = array([m*w**2*r*sy.sin(radians(theta)),0])
 vecF_g = array([0, -m*g])
-vecF_c = array([-m*w**2*r*sy.sin(radians(theta)),0])
-vecF_N = vecF_c - vecF_g
+
+unitF_N = array([-sin(radians(theta)), cos(radians(theta))])
+F_N = -(dot(unitF_N, vecF_g) + dot(unitF_N, vecF_c))
+vecF_N = F_N * unitF_N
+
+vecF_f = vecF_c + vecF_g + vecF_N
+
 F_fMax = U_s * magnitude(vecF_N)
-
-#orth = sy.symbols('orth')
-#eq = vecF_N[0] + vecF_N[1]*orth
-#orth = sy.solve(eq, orth)[0]
-
-#vecF_f = array([F_fx, F_fy]) * unit(array([1, orth]))
-
-vecF_f = vecF_N + vecF_g
-#eq =  vecF_N + vecF_f + vecF_g
-
-#F_fx = sy.solve(eq[0], F_fx)[0]
-#F_fy = sy.solve(eq[1], F_fy)[0]
-#F_f = magnitude(array([F_fx, F_fy]))
 
 F_f = magnitude(vecF_f)
 
-#vecF_f = F_f *  unit(array([1, orth]))
 print("angle = ", angle(vecF_f))
 
 if (F_f < F_fMax):
