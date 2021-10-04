@@ -53,65 +53,103 @@ def angle(arr):
 #----------------------
 T1 = 550
 T2 = 3000
-T3 = -4000
+W = -4000
 g = -32.2
-F = 2*T1 + T2 + T3
-m = T3/g
+F = 2*T1 + T2 + W 
+m = W/g
 vf = 4
 
 t = m*vf/F 
 
 print("t = : ", t)
-
-print('#----------------------')
-g = -9.81
-m = 0.07
-I = .5*(0.2)*13+.5*(0.1*8)+0.1*5+0.5*5 + m*g * 0.8
-v = I/m
-print('v = : ', v)
-t = -v/g + .8
-print('t = : ', t)
-
-print('#----------------------')
-g = -32.2
-m = 5.5/16/g
-vb = -89*5280/60/60
-vHat = -30
-deltaX = -6/12
-
-P0 = m*vb
-deltaT = deltaX/vHat
-F = -P0/deltaT
-
-print("F = : ", F)
-
-print('#----------------------')
-m, v0, vf, vHat, deltaX = 0.029, 660, 500, 600, 0.05
-vecAB = array([cos(radians(20)), -sin(radians(20))])
-vecCD = array([cos(radians(10)), sin(radians(10))])
-
-deltaT = deltaX/vHat
-deltaP = m*vf*vecCD - m*v0*vecAB
-vecF = deltaP/deltaT
-F = magnitude(vecF)
-angle = angle(vecF)
-print("F in kn = : ", F/1000)
-print("angle = : ", angle)
-
-print('#----------------------')
-m_A, m_B = 1500, 1200
-vecA = array([cos(radians(30)), sin(radians(30))])
-vecB = array([0, -1])
-vecF = array([cos(radians(10)), sin(radians(10))])
-v_A, v_B, v_F = sy.symbols('v_A, v_B, v_F')
-
-deltaP = (m_A*vecF*v_F + m_B*vecF*v_F) - (m_A*vecA*v_A + m_B*vecB*v_B) 
-
-print(sy.solve([deltaP[0],deltaP[1]] , [v_A, v_B]))
-
-print('#----------------------')
-v_B = kmPerHrToMPerS(50)
-deltaP = (m_A*vecF*v_F + m_B*vecF*v_F) - (m_A*vecA*v_A + m_B*vecB*v_B) 
-sol = sy.solve([deltaP[0],deltaP[1]] , [v_A, v_F])
-print(mPerSToKmPerH(sol[v_A]))
-
+#
+#print('#----------------------')
+#g = -9.81
+#m = 0.07
+#I = .5*(0.2)*13+.5*(0.1*8)+0.1*5+0.5*5 + m*g * 0.8
+#v = I/m
+#print('v = : ', v)
+#t = -v/g + .8
+#print('t = : ', t)
+#
+#print('#----------------------')
+#g = -32.2
+#m = 5.5/16/g
+#vb = -89*5280/60/60
+#vHat = -30
+#deltaX = -6/12
+#
+#P0 = m*vb
+#deltaT = deltaX/vHat
+#F = -P0/deltaT
+#
+#print("F = : ", F)
+#
+#print('#----------------------')
+#m, v0, vf, vHat, deltaX = 0.029, 660, 500, 600, 0.05
+#vecAB = array([cos(radians(20)), -sin(radians(20))])
+#vecCD = array([cos(radians(10)), sin(radians(10))])
+#
+#deltaT = deltaX/vHat
+#deltaP = m*vf*vecCD - m*v0*vecAB
+#vecF = deltaP/deltaT
+#F = magnitude(vecF)
+#angle = angle(vecF)
+#print("F in kn = : ", F/1000)
+#print("angle = : ", angle)
+#
+#print('#----------------------')
+#m_A, m_B = 1500, 1200
+#vecA = array([cos(radians(30)), sin(radians(30))])
+#vecB = array([0, -1])
+#vecF = array([cos(radians(10)), sin(radians(10))])
+#v_A, v_B, v_F = sy.symbols('v_A, v_B, v_F')
+#
+#deltaP = (m_A*vecF*v_F + m_B*vecF*v_F) - (m_A*vecA*v_A + m_B*vecB*v_B) 
+#
+#print(sy.solve([deltaP[0],deltaP[1]] , [v_A, v_B]))
+#
+#print('#----------------------')
+#v_B = kmPerHrToMPerS(50)
+#deltaP = (m_A*vecF*v_F + m_B*vecF*v_F) - (m_A*vecA*v_A + m_B*vecB*v_B) 
+#sol = sy.solve([deltaP[0],deltaP[1]] , [v_A, v_F])
+#print(mPerSToKmPerH(sol[v_A]))
+#
+#print('#----------------------')
+#g = 32.2
+#mb = .5/16/g  
+#ma = 3/6
+#mc = ma
+#uk = 0.35
+#d1 = 6/12
+#d2 = 4/12
+#
+#v0, va, vb, vc = sy.symbols('v0, va, vb, vc')
+#eq1 = ma*va + mb*vb - mb*v0
+#eq2 = mc*vc + mb*vc - mb*vb
+#eq3 = .5*ma*va**2-uk*ma*g*d1
+#eq4 = .5*mc*vc**2+.5*mb*vc**2 - uk*(mb+mc)*g*d2
+#
+#print(sy.solve([eq1, eq2, eq3, eq4]))
+#
+#
+#print('#----------------------')
+#g = 9.81
+#ma = .006
+#mb = 1
+#l = 2.2
+#theta = 60
+#
+#h = 2.2 - 2.2*cos(radians(60))
+#
+#v0,vp0 = sy.symbols('v0, vp0')
+#eq1 = -ma*v0 + (ma+mb)*vp0
+#eq2 = -.5*(ma + mb)*vp0**2 + (ma + mb)*g*h
+#
+#print(sy.solve([eq1, eq2]))
+#v0 = sy.solve([eq1, eq2])[1][v0]
+#vp0 = sy.solve([eq1, eq2])[1][vp0]
+#deltaP = mb*vp0
+#print('deltaP = : ', deltaP)
+#F = (mb+ma)*vp0**2/l + (mb+ma)*g
+#print('force = :', F)
