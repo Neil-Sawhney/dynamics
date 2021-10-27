@@ -86,7 +86,7 @@ F = -P0/deltaT
 print("F = : ", F)
 
 print('#----------------------')
-m, v0, vf, vHat, deltaX = 0.029, 660, 500, 600, 0.05
+m, v0, vf, vHat, deltaX = 0.028, 650, 500, 600, 0.05
 vecAB = array([cos(radians(20)), -sin(radians(20))])
 vecCD = array([cos(radians(10)), sin(radians(10))])
 
@@ -99,7 +99,7 @@ print("F in kn = : ", F/1000)
 print("angle = : ", angle)
 
 print('#----------------------')
-m_A, m_B = 1500, 1200
+m_A, m_B = 1660, 1350
 vecA = array([cos(radians(30)), sin(radians(30))])
 vecB = array([0, -1])
 vecF = array([cos(radians(10)), sin(radians(10))])
