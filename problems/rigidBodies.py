@@ -80,20 +80,22 @@ print("angular acceleration = ", sy.limit(theta.diff(t, 2), t, inf))
 print("#----------------------")
 r_B, r_A  = 0.03, 0.03
 r_E = 0.09
-w_E = 155
-w_A = 215
+w_E = -155
+w_A = -215
+
 
 v_top = w_E*r_E
 w_B = sy.symbols("w_B")
-eq = v_top + w_B*2*r_B -w_A*r_A
+eq = -v_top + w_B*2*r_B +w_A*r_A
 w_B = sy.solve(eq, w_B)[0]
 print("w_B = ",w_B)
 
 print("#----------------------")
-v_bot = v_top + w_B*2*r_B
-v_cm_B = w_B*r_B + v_bot
-w_S = v_cm_B*2*r_A
+v_cm_B = w_A*r_A + w_B*r_B 
+w_S = v_cm_B/(2*r_A)
 
 print("w_S = ", w_S)
 
 print("#----------------------")
+DA,EB, v_D, r = 5,4,6,6
+w_D = v_D/r
