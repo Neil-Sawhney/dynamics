@@ -135,22 +135,89 @@ print("v_D", vv_E)
 print("a_D", va_D)
 
 print("#----------------------")
-v_H_K, w_KH, v_H, a_H = sy.symbols("v_H_K w_K_H v_H a_H ")
+v_H_K, w_KH, v_H, a_H = sy.symbols("v_H_K w_KH v_H a_H ")
 vv_H = array([0,v_H, 0])
 va_H = array([0,a_H, 0])
 vw_AK = array([0,0,1.1])
-valpha_AK = array([0,0,1.1])
 valpha_AK = array([0,0,1])
 
 vr_H_K = array([-14,14,0])
 vr_K_A = array([12,12,0])
+
+vw_HK = array([0,0,w_KH])
 vv_K = cross(vw_AK, vr_K_A)
-vH_Kx, vH_Ky = sy.symbols('vH_Kx vH_Ky')
-vv_H_K = array([-2*vv_K[0], vH_Ky, 0])
+eq1 = cross(vw_HK, -vr_H_K) +vv_H- vv_K
+sol1 = sy.solve([eq1[0], eq1[2],eq1[2]])
+vw_KH = array([0,0,sol1[w_KH]])
 
-vw_KH = array([0,0, w_KH])
-eq1 = vv_K + array([-14*w_KH,-14*w_KH,0]) - vv_H_K
-vw_KH_AK = vw_KH - vw_AK
-sol1 = sy.solve([eq1[1], eq1[2]])
-print(sol1)
+vw_KH_AK = vw_KH - vw_AK 
+print("w_KH/AK= ", vw_KH_AK)
+# accel
+alpha_KH= sy.symbols("alpha_KH")
+valpha_KH = array([0,0,alpha_KH])
+va_K = cross(valpha_AK, vr_K_A) + cross(vw_AK,vv_K)
+eq2 =  cross(valpha_KH, -vr_H_K) + cross(vw_KH, -cross(vw_KH, vr_H_K)) + va_H - va_K
+sol2 = sy.solve(eq2)
+valpha_KH = array([0,0,sol2[alpha_KH]])
+valpha_KH_AK = valpha_KH - valpha_AK
+print("valpha_KH_AK =", valpha_KH_AK)
 
+print("#----------------------")
+R_1, R_2, h = sy.symbols("R_1 R_2 h")
+g = 9.8
+m = 20
+N = 110
+va = array([N/m,0,0])
+vR_1 = array([0,R_1,0])
+vR_2 = array([0,R_2,0])
+vF_g = array([0,-m*g,0])
+vN = array([N,0,0])
+print("a = ", va)
+eq1 = array([0,0,-N*h]) + cross(array([0.3,0,0]),vF_g)- N*0.9
+eq2 = array([0,0,-N*h]) + cross(array([-0.3,0,0]),vF_g)- N*0.9
+eq3 = array([0,0,-.3*R_1]) + array([0,0,.3*R_2]) + array([0,0, N*(.9-h)])
+sol1 = -sy.solve(eq1[2])[0]
+sol2 = -sy.solve(eq2[2])[0]
+print("h is inbetween {} and {}".format(sol1, sol2))
+
+
+print("#----------------------")
+m=10
+g = 9.8
+theta = radians(30)
+Ay, Bx, By, Cx, Cy, Dx, Dy, Ey, F = sy.symbols("Ay Bx By Cx Cy Dx Dy Ey F")
+vr_DB = 0.6*sy.Matrix([cos(theta),sin(theta),0])
+vr_EA = 0.6*sy.Matrix([-cos(theta),sin(theta),0])
+vA = sy.Matrix([0,Ay,0])
+vB = sy.Matrix([Bx,By,0])
+vC = sy.Matrix([Cx,Cy,0])
+vD = sy.Matrix([Dx,Dy,0])
+vE = sy.Matrix([0,Ey,0])
+vF = F*sy.Matrix([vr_DB[1],-vr_DB[0],0])
+vG = sy.Matrix([0,-m*g,0])
+
+M_D = vr_DB.cross(vE) + vr_DB.cross(vB)
+M_C = (.5*vr_EA).cross(vA) - (.5*vr_EA).cross(vB)
+M_B = (sy.Matrix([-.15,0,0])).cross(vG) - (vr_DB).cross(vA)
+eq1 = -vA - vB + vG - vF
+solx = sy.solve([M_D[0],M_C[0],eq1[0],M_B[0]]) 
+soly = sy.solve([M_D[1],M_C[1],eq1[1],M_B[1]]) 
+solz = sy.solve([M_D[2],M_C[2],eq1[2],M_B[2]]) 
+
+print("#----------------------")
+theta = radians(60)
+T_DE,F_N,T_BC,F_f,F_p,F_by,F_bx,a_By,a_py= sy.symbols("T_DE F_N T_BC F_f F_p F_by F_bx a_By a_py")
+mu_k,m_B,m_p,g = 0.4,36,5,32.2
+
+eq1 = sy.Eq(18/12*T_DE*sin(theta)-m_p*g*(9/12)+F_N*(9/12),0)#Moment about b
+eq2 = sy.Eq(-18/12*T_BC*sin(theta)+m_p*g*(9/12)-F_N*(9/12),0)#moment about d
+eq3 = sy.Eq(T_BC*cos(theta)+T_DE*cos(theta) - F_f, F_p*sin(theta))#forces in x for p
+eq4 = sy.Eq(T_BC*sin(theta)+T_DE*sin(theta) - m_p*g + F_N, F_p*cos(theta)) #forces in y for p
+eq5 = sy.Eq(F_f,mu_k*F_N) #force of friction
+eq6 = sy.Eq(F_f, F_bx) #forces in x for b
+eq7 = sy.Eq(-m_B*g  - F_N, F_by) #forces in y for b
+eq8 = sy.Eq(a_By, a_py)  #accel y
+eq9 = sy.Eq(F_by, m_B*a_By)  #f = ma block
+eq10 = sy.Eq(F_p*cos(theta), m_p*a_py)  #f=ma plat
+
+print(sy.solve([eq3,eq4,eq5,eq6,eq7]))
