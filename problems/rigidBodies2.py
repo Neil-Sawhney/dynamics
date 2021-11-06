@@ -79,8 +79,78 @@ I_z = I_1z - I_2z - I_3z
 print("I_z = ", I_z)
 
 print("#----------------------")
-theta = sy.symbols("theta")
-r_B_A = 0.05*sy.Matrix([sy.sin(theta), sy.cos(theta), 0])
-r_D_B = sy.Matrix([0, 0.05*sy.cos(theta)- sy.sqrt(0.15**2 - 0.05**2*sy.Pow(sy.sin(theta),2)) , 0]) - r_B_A
-r_D_A = r_B_A + r_D_B
-a_D_A = diff(r_D_A, theta, 2)
+theta = radians(60);
+w_AB = array([0,0,-950*2*pi/60])
+r_B_A = 0.05*array([sin(theta), cos(theta), 0])
+v_B = cross(w_AB, r_B_A)
+phi = arcsin(sin(theta)/.15*.05)
+r_D_B = 0.15*array([-sin(phi), cos(phi), 0])
+w_DB ,v_D = sy.symbols("w_DB v_D")
+vecv_D=array([0,v_D, 0])
+v_D_B = array([-r_D_B[1]*w_DB, r_D_B[0]*w_DB, 0])
+eq = v_B+ v_D_B  - vecv_D
+print(sy.solve(eq))
+v_D = array([0,sy.solve(eq)[v_D], 0])
+w_DB = array([0,0, sy.solve(eq)[w_DB]])
+
+alpha_BD ,a_D = sy.symbols("alpha_BD a_D")
+a_B = cross(w_AB, v_B)
+v_D_B = cross(w_DB, r_D_B) 
+eq2 = a_B + array([-alpha_BD*r_D_B[1], alpha_BD*r_D_B[0], 0]) + cross(w_DB, v_D_B) - array([0, a_D, 0])
+print("a_D = ", sy.solve(eq2))
+
+print("#----------------------")
+vr_A_O = array([-0.6,0,0])
+vr_B_A = array([0.6,2,0])
+vw_OA = array([0,0,-24*2*pi/60])
+vv_A = cross(vr_A_O, vw_OA)
+v_B, w_AB, alpha_BCE, a_E = sy.symbols("v_B w_AB alpha_BCE a_E")
+vv_B = array([0,v_B,0])
+vw_AB = array([0,0,w_AB])
+eq1 = vv_A + cross(vw_AB,vr_B_A) + vv_B
+s1 = sy.solve(eq1)
+print(s1)
+v_B = s1[v_B]
+vv_B = array([0,v_B,0])
+w_AB = s1[w_AB]
+vw_AB = array([0,0,w_AB])
+w_BCE = -v_B / 3
+v_E = w_BCE*3.3
+vw_BCE = array([0,0,w_BCE])
+valpha_BCE = array([0,0,alpha_BCE])
+a_Bx,a_By=sy.symbols("a_Bx a_By")
+eq2 = cross(valpha_BCE,array([-3,0,0]))+cross(vw_BCE,vv_B) - array([a_Bx,a_By,0]) #array
+alpha_AB, a_Bx, a_By = sy.symbols("alpha_AB a_Bx a_By")
+valpha_AB = array([0,0,alpha_AB])
+va_B = array([a_Bx, a_By,0])
+eq3 = cross(valpha_BCE,array([-3,0,0])) + cross(vw_BCE, vv_B) - va_B
+va_A= cross(-vw_OA,vv_A)
+eq4 = va_A + cross(valpha_AB,vr_B_A)  - va_B
+sol4 = sy.solve([eq3[0], eq3[1], eq4[1], eq4[0]])
+print(sol4)
+valpha_BCE = array([0,0,sol4[alpha_BCE]])
+vv_E = array([0,0,v_E])
+va_D = cross(valpha_BCE,array([3.3, 0, 0])) + cross(vw_BCE,vv_E)
+print("v_D", vv_E)
+print("a_D", va_D)
+
+print("#----------------------")
+v_H_K, w_KH, v_H, a_H = sy.symbols("v_H_K w_K_H v_H a_H ")
+vv_H = array([0,v_H, 0])
+va_H = array([0,a_H, 0])
+vw_AK = array([0,0,1.1])
+valpha_AK = array([0,0,1.1])
+valpha_AK = array([0,0,1])
+
+vr_H_K = array([-14,14,0])
+vr_K_A = array([12,12,0])
+vv_K = cross(vw_AK, vr_K_A)
+vH_Kx, vH_Ky = sy.symbols('vH_Kx vH_Ky')
+vv_H_K = array([-2*vv_K[0], vH_Ky, 0])
+
+vw_KH = array([0,0, w_KH])
+eq1 = vv_K + array([-14*w_KH,-14*w_KH,0]) - vv_H_K
+vw_KH_AK = vw_KH - vw_AK
+sol1 = sy.solve([eq1[1], eq1[2]])
+print(sol1)
+
